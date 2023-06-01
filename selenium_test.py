@@ -1,12 +1,11 @@
 import time
-start_time = time.time()
+# start_time = time.time()
 from datetime import datetime, timedelta
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
-import time
 import json
 import fulllist
 
@@ -49,7 +48,7 @@ def get_post_info(url, fulldatalist):
     # Find all listing items
     listings = soup.find_all("li")
 
-    print(listings)
+    # print(listings)
     postinfolist = []
 
     # Iterate over each listing and extract title, link, and date
@@ -111,16 +110,17 @@ def all_posts_to_json_from_list(fulldatalist):
 fulldatalist = [] #initialize the list here
 # for i in range(4): ## For testing
 #     item = fulllist.cl_list[i] ## For testing
-for item in fulllist.cl_list:
-    print("Now processing: "+item["state_name"])
-    for locs in item["state_list"]:
-        print(locs["location"])
-        print(locs["link"]+"/search/cpg?bundleDuplicates=1")
-        post_info = get_post_info(locs["link"]+"/search/cpg?bundleDuplicates=1", fulldatalist)
-        fulldatalist = save_all_post_to_list(locs["location"], post_info, fulldatalist)
-        if post_info: 
-            save_post_info_to_json(post_info, locs["location"])
-all_posts_to_json_from_list(fulldatalist)
+while True:
+    for item in fulllist.cl_list:
+        print("Now processing: "+item["state_name"])
+        for locs in item["state_list"]:
+            print(locs["location"])
+            print(locs["link"]+"/search/cpg?bundleDuplicates=1")
+            post_info = get_post_info(locs["link"]+"/search/cpg?bundleDuplicates=1", fulldatalist)
+            fulldatalist = save_all_post_to_list(locs["location"], post_info, fulldatalist)
+            if post_info: 
+                save_post_info_to_json(post_info, locs["location"])
+    all_posts_to_json_from_list(fulldatalist)
 # Quit the browser
 driver.quit()
 
